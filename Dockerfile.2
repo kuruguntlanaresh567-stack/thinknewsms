@@ -1,0 +1,10 @@
+FROM php:8.2-apache                # Use the official PHP image with Apache:contentReference[oaicite:0]{index=0}  
+COPY . /var/www/html/              # Copy your PHP files into Apache’s web root  
+# (Optional) Install PHP extensions if needed, e.g.: 
+# RUN docker-php-ext-install mysqli
+# Configure Apache to use Render’s $PORT (default 10000): 
+ENV PORT 10000  
+RUN sed -ri "s/Listen 80/Listen ${PORT}/" /etc/apache2/ports.conf \
+ && sed -ri "s/VirtualHost \\*:80/VirtualHost *:${PORT}/" /etc/apache2/sites-available/000-default.conf  
+EXPOSE 10000  
+CMD ["apache2-foreground"]        # Start Apache in the foreground
